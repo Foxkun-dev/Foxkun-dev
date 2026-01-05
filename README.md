@@ -1,27 +1,29 @@
-# Hi there, I'm [Tên Của Bạn] 👋
+name: Generate Snake
 
-> "Code is like humor. When you have to explain it, it’s bad." – Cory House
+on:
+  schedule: # Chạy tự động mỗi 12 tiếng
+    - cron: "0 */12 * * *"
+  workflow_dispatch: # Cho phép bấm chạy thủ công
 
-### 👨‍💻 About Me
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: Platane/snk@v3
+        id: snake-gif
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+            dist/github-contribution-grid-snake-dark.svg?palette=github-dark
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-I am a passionate developer focusing on building scalable applications.
-
-* **Current Focus**: Full-stack Development
-* **Hobbies**: Coding, Reading, Gaming 🎮
-* **Location**: Vietnam 🇻🇳
-
-### 🚀 Tech Stack
-
-| Category | Technologies |
-|Str|Str|
-| **Languages** | Python, JavaScript, TypeScript |
-| **Frontend** | React, Tailwind CSS |
-| **Backend** | Node.js, Express |
-| **Database** | MongoDB, PostgreSQL |
-
-### 📈 My Contributions
-
-![Snake animation](https://github.com/[YOUR_GITHUB_USERNAME]/[YOUR_GITHUB_USERNAME]/blob/output/github-contribution-grid-snake.svg)
-
----
-[Website](https://your-website.com) • [Linkedin](https://linkedin.com/in/your-profile)
+      - uses: crazy-max/gh-action-github-pages@v3
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
